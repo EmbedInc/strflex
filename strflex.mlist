@@ -1,4 +1,5 @@
 strflex_block.obj
 strflex_len.obj
+strflex_pos.obj
 strflex_str.obj
 strflex_strmem.obj

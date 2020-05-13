@@ -33,8 +33,8 @@ type
 
   strflex_pos_p_t = ^strflex_pos_t;
   strflex_pos_t = record               {character position within a flex string}
-    ind: sys_int_machine_t;            {index into the whole string}
     str_p: strflex_p_t;                {points to the string}
+    ind: sys_int_machine_t;            {index into the whole string}
     blk_p: strflex_block_p_t;          {points to the current block within string}
     blkn: sys_int_machine_t;           {index of curr character within the block}
     end;
@@ -109,7 +109,7 @@ procedure strflex_pos_inc (            {increment position to next char, unless 
   val_param; extern;
 
 procedure strflex_pos_init (           {init position state within a flex string}
-  in      str: strflex_t;              {string to position within}
+  in var  str: strflex_t;              {string to position within}
   out     pos: strflex_pos_t);         {initialized, at first char}
   val_param; extern;
 
