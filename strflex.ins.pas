@@ -47,7 +47,7 @@ function strflex_char (                {get string character at current position
   val_param; extern;
 
 function strflex_char_inc (            {get character at curr position, then increment pos}
-  in      pos: strflex_pos_t)          {position into string}
+  in out  pos: strflex_pos_t)          {position into string}
   :char;                               {character at position, NULL past end of string}
   val_param; extern;
 
