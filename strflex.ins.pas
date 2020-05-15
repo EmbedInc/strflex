@@ -34,9 +34,9 @@ type
   strflex_pos_p_t = ^strflex_pos_t;
   strflex_pos_t = record               {character position within a flex string}
     str_p: strflex_p_t;                {points to the string}
-    ind: sys_int_machine_t;            {index into the whole string}
-    blk_p: strflex_block_p_t;          {points to the current block within string}
-    blkn: sys_int_machine_t;           {index of curr character within the block}
+    ind: sys_int_machine_t;            {index into string, LEN+1 for past end}
+    blk_p: strflex_block_p_t;          {pnt to curr block, NIL for no blocks}
+    blkn: sys_int_machine_t;           {index into block, 1 when no blocks}
     end;
 {
 *   Functions and subroutines.

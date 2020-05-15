@@ -29,14 +29,7 @@ begin
   pos.str_p := addr(str);
   pos.ind := 1;
   pos.blk_p := str.first_p;
-  if pos.blk_p = nil
-    then begin
-      pos.blkn := 0;
-      end
-    else begin
-      pos.blkn := 1;
-      end
-    ;
+  pos.blkn := 1;
   end;
 {
 ********************************************************************************
@@ -108,8 +101,15 @@ begin
     return;
     end;
 
-  pos.blk_p := pos.blk_p^.next_p;      {advance to the next block}
-  pos.blkn := 1;                       {to first character in this new block}
+  if pos.blk_p^.next_p = nil
+    then begin                         {currently in last block}
+      pos.blkn := pos.blk_p^.nch + 1;  {to one after last char in last block}
+      end
+    else begin                         {there is a following block}
+      pos.blk_p := pos.blk_p^.next_p;  {advance to the next block}
+      pos.blkn := 1;                   {to first character in this new block}
+      end
+    ;
   end;
 {
 ********************************************************************************
@@ -196,6 +196,11 @@ begin
 {
 ********************************************************************************
 *
+*   Function STRFLEX_POS (POS)
+*
+*   Returnes the overall string index of the position POS.  The returned value
+*   is always at least 1.  The string length + 1 is returned when the position
+*   is after the end of the string.
 }
 function strflex_pos (                 {get current string position}
   in      pos: strflex_pos_t)          {string position descriptor}
@@ -208,6 +213,9 @@ begin
 {
 ********************************************************************************
 *
+*   Function STRFLEX_POS_EOS (POS)
+*
+*   Indicates whether the current position is past the end of the string.
 }
 function strflex_pos_eos (             {find whether past end of string}
   in      pos: strflex_pos_t)          {string position descriptor}
