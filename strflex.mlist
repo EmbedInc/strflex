@@ -1,6 +1,7 @@
 strflex_append.obj
 strflex_block.obj
 strflex_char.obj
+strflex_copy.obj
 strflex_del.obj
 strflex_ins.obj
 strflex_len.obj

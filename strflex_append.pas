@@ -85,6 +85,6 @@ var
 begin
   vstr.max := size_char(vstr.str);     {init local var string}
 
-  string_vstring (vstr, s, -1);        {convert input string to var string}
+  string_vstring (vstr, s, size_char(s)); {convert input string to var string}
   strflex_append_vstr (str, vstr);     {append the var string}
   end;

@@ -256,7 +256,7 @@ var
 begin
   vstr.max := size_char(vstr.str);     {init local var string}
 
-  string_vstring (vstr, s, -1);        {convert input string to a var string}
+  string_vstring (vstr, s, size_char(s)); {convert input string to a var string}
   strflex_insbef_vstr (pos, vstr);     {insert the var string before current pos}
   end;
 {
@@ -379,6 +379,6 @@ var
 begin
   vstr.max := size_char(vstr.str);     {init local var string}
 
-  string_vstring (vstr, s, -1);        {convert input string to a var string}
+  string_vstring (vstr, s, size_char(s)); {convert input string to a var string}
   strflex_insaft_vstr (pos, vstr);     {insert the var string after current pos}
   end;

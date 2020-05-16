@@ -66,6 +66,25 @@ function strflex_char_inc (            {get character at curr position, then inc
   :char;                               {character at position, NULL past end of string}
   val_param; extern;
 
+procedure strflex_clear (              {clear existing string to empty}
+  in out  str: strflex_t);             {string to clear, will have 0 length}
+  val_param; extern;
+
+procedure strflex_copy_f_vstr (        {copy var string into flex string}
+  in      vstr: univ string_var_arg_t; {source var string}
+  in out  str: strflex_t);             {destination flex string}
+  val_param; extern;
+
+procedure strflex_copy_f_str (         {copy Pascal/C string into flex string}
+  in      s: string;                   {source string}
+  in out  str: strflex_t);             {destination flex string}
+  val_param; extern;
+
+procedure strflex_copy_t_vstr (        {copy flex string into var string}
+  in      str: strflex_t;              {source flex string}
+  in out  vstr: univ string_var_arg_t); {destination var string}
+  val_param; extern;
+
 procedure strflex_del_bak (            {delete curr char, back to previous}
   in out  pos: strflex_pos_t);         {position into string}
   val_param; extern;
@@ -143,6 +162,14 @@ procedure strflex_pos_last (           {position to last character of string, if
 procedure strflex_pos_set (            {set absolute string position}
   in out  pos: strflex_pos_t;          {string position to set}
   in      ind: sys_int_machine_t);     {1-N index to set pos to, clipped at length + 1}
+  val_param; extern;
+
+procedure strflex_show_str (           {show detailed flex string state}
+  in      str: strflex_t);             {string to show internal details of}
+  val_param; extern;
+
+procedure strflex_show_pos (           {show detailed string and position state}
+  in      pos: strflex_pos_t);         {position within the string}
   val_param; extern;
 
 procedure strflex_str_create (         {create a new flex string}
