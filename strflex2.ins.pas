@@ -11,6 +11,11 @@ procedure strflex_block_new (          {get a new or free flex string memory blo
   out     block_p: strflex_block_p_t); {pointer to new block, block initialized}
   val_param; extern;
 
+procedure strflex_block_remove (       {remove block from string, release block}
+  in out  str: strflex_t;              {string the block is in}
+  in      block_p: strflex_block_p_t); {pointer to block, copied before use}
+  val_param; extern;
+
 procedure strflex_block_unuse (        {indicate a flex string mem block no longer used}
   in out  strmem: strflex_mem_t;       {memory state the block came from}
   in out  block_p: strflex_block_p_t); {pointer to the block, returned NIL}

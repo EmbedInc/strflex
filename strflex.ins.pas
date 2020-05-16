@@ -51,6 +51,14 @@ function strflex_char_inc (            {get character at curr position, then inc
   :char;                               {character at position, NULL past end of string}
   val_param; extern;
 
+procedure strflex_del_bak (            {delete curr char, back to previous}
+  in out  pos: strflex_pos_t);         {position into string}
+  val_param; extern;
+
+procedure strflex_del_fwd (            {delete curr char, forward to next}
+  in out  pos: strflex_pos_t);         {position into string}
+  val_param; extern;
+
 procedure strflex_insaft_char (        {insert character after current}
   in out  pos: strflex_pos_t;          {pos to insert after, returned at new char}
   in      c: char);                    {character to insert}
