@@ -7,5 +7,6 @@ strflex_del.obj
 strflex_ins.obj
 strflex_len.obj
 strflex_pos.obj
+strflex_show.obj
 strflex_str.obj
 strflex_strmem.obj

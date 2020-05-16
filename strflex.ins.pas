@@ -164,12 +164,12 @@ procedure strflex_pos_set (            {set absolute string position}
   in      ind: sys_int_machine_t);     {1-N index to set pos to, clipped at length + 1}
   val_param; extern;
 
-procedure strflex_show_str (           {show detailed flex string state}
-  in      str: strflex_t);             {string to show internal details of}
-  val_param; extern;
-
 procedure strflex_show_pos (           {show detailed string and position state}
   in      pos: strflex_pos_t);         {position within the string}
+  val_param; extern;
+
+procedure strflex_show_str (           {show detailed flex string state}
+  in      str: strflex_t);             {string to show internal details of}
   val_param; extern;
 
 procedure strflex_str_create (         {create a new flex string}

@@ -18,6 +18,7 @@ call src_pas %srcdir% %libname%_del
 call src_pas %srcdir% %libname%_ins
 call src_pas %srcdir% %libname%_len
 call src_pas %srcdir% %libname%_pos
+call src_pas %srcdir% %libname%_show
 call src_pas %srcdir% %libname%_str
 call src_pas %srcdir% %libname%_strmem
 

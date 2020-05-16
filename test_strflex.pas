@@ -93,9 +93,7 @@ loop_cmd:                              {back here to get each new command}
     end;
 
   lockout;
-(*
   strflex_show_pos (pos);              {show detailed string and position state}
-*)
   string_prompt (prompt);              {prompt the user for a command}
   newline := false;                    {indicate STDOUT not at start of new line}
   unlockout;
