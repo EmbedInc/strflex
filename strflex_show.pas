@@ -105,5 +105,5 @@ begin
 
   write ('  At string index ', pos.ind, ', block ');
   wadr (pos.blk_p);
-  writeln (', char ', pos.blkn);
+  writeln (' char ', pos.blkn);
   end;

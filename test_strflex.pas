@@ -15,15 +15,16 @@ var
   str: strflex_t;                      {the string under test}
   pos: strflex_pos_t;                  {position into the test string}
   pos_valid: boolean;                  {POS is valid, STR not changed out from under}
+  i1: sys_int_machine_t;               {integer command parameter}
   cmds:                                {the possible commands, upper case}
     %include '(cog)lib/string8192.ins.pas';
 
   prompt:                              {prompt string for entering command}
     %include '(cog)lib/string4.ins.pas';
   cmd:                                 {command name, upper case}
-    %include '(cog)lib/string_treename.ins.pas';
-  parm:                                {command parameter}
-    %include '(cog)lib/string_treename.ins.pas';
+    %include '(cog)lib/string8192.ins.pas';
+  parm, tk:                            {command parameters}
+    %include '(cog)lib/string8192.ins.pas';
   pick: sys_int_machine_t;             {number of token picked from list}
   stat: sys_err_t;                     {completion status code}
 
@@ -143,6 +144,122 @@ loop_cmd:                              {back here to get each new command}
 {
 **********
 *
+*   APP chars
+*
+*   Append CHARS to end of string.
+}
+5: begin
+  next_raw (parm);                     {get CHARS into PARM}
+  strflex_append_vstr (str, parm);     {append the characters to end of string}
+  pos_valid := false;                  {string changed directly, POS is invalid}
+  end;
+{
+**********
+*
+*   DEL BAK|FWD
+*
+*   Delete current character, go backwards or forwards after.
+}
+6: begin
+  next_keyw (parm, stat);
+  if sys_error(stat) then goto err_cmparm;
+  if not_eos then goto err_extra;
+
+  string_tkpick80 (parm,
+    'BAK FWD',
+    pick);
+  case pick of
+1:  begin                              {DEL BACK}
+      strflex_del_bak (pos);
+      end;
+2:  begin                              {DEL FWD}
+      strflex_del_fwd (pos);
+      end;
+otherwise
+    goto bad_parm;
+    end;
+  end;
+{
+**********
+*
+*   INS BEF|AFT chars
+*
+*   Insert character at current position, go to before or after.
+}
+7: begin
+  next_keyw (parm, stat);
+  if sys_error(stat) then goto err_cmparm;
+  string_tkpick80 (parm,
+    'BEF AFT',
+    pick);
+  next_raw (tk);                       {get CHARS into TK}
+  case pick of
+1:  begin                              {INS BEF chars}
+      strflex_insbef_vstr (pos, tk);
+      end;
+2:  begin                              {INS AFT chars}
+      strflex_insaft_vstr (pos, tk);
+      end;
+otherwise
+    goto bad_parm;
+    end;
+  end;
+{
+**********
+*
+*   INC
+*
+*   Move position forward by 1.
+}
+8: begin
+  strflex_pos_inc (pos);
+  end;
+{
+**********
+*
+*   DEC
+*
+*   Move position backward by 1.
+}
+9: begin
+  strflex_pos_dec (pos);
+  end;
+{
+**********
+*
+*   LAST
+*
+*   Go to last character in the string.
+}
+10: begin
+  strflex_pos_last (pos);
+  end;
+{
+**********
+*
+*   EOS
+*
+*   Go to past the end of the string.
+}
+11: begin
+  strflex_pos_end (pos);
+  end;
+{
+**********
+*
+*   TO n
+*
+*   Go to string character N.
+}
+12: begin
+  i1 := next_int (-32768, 32767, stat);
+  if sys_error(stat) then goto err_cmparm;
+
+  strflex_pos_set (pos, i1);
+  end;
+{
+**********
+*
 *   Unrecognized command name.
 }
 otherwise
@@ -179,4 +296,6 @@ err_cmparm:                            {parameter error, STAT set accordingly}
   goto loop_cmd;
 
 leave:
+  strflex_str_delete (str);            {delete the test string}
+  strflex_strmem_delete (strmem);      {deallocate all dynamic memory}
   end.
