@@ -2,6 +2,7 @@
 }
 module strflex_block;
 define strflex_block_new;
+define strflex_block_first;
 define strflex_block_unuse;
 define strflex_block_remove;
 %include 'strflex2.ins.pas';
@@ -43,6 +44,30 @@ begin
   for ii := 1 to strflex_blkchars do begin
     block_p^.ch[ii] := chr(0);
     end;
+  end;
+{
+********************************************************************************
+*
+*   Subroutine STRFLEX_BLOCK_FIRST (STR)
+*
+*   Add first block to empty string.  Nothing is done if the string already has
+*   at least one block.
+*
+*   Any existing positions into STR should be considered invalid after this
+*   call.
+}
+procedure strflex_block_first (        {add first block to empty string}
+  in out  str: strflex_t);             {string to add first block to}
+  val_param;
+
+begin
+  if str.first_p <> nil then return;   {string already has blocks ?}
+
+  strflex_block_new (                  {get and init a new block}
+    str.strmem_p^,                     {memeory state to get block from}
+    str.first_p);                      {returned pointer to the new block}
+
+  str.last_p := str.first_p;           {first block is also the last block}
   end;
 {
 ********************************************************************************

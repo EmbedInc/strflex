@@ -6,6 +6,10 @@
 %include 'file.ins.pas';
 %include 'strflex.ins.pas';
 
+procedure strflex_block_first (        {add first block to empty string}
+  in out  str: strflex_t);             {string to add first block to}
+  val_param; extern;
+
 procedure strflex_block_new (          {get a new or free flex string memory block}
   in out  strmem: strflex_mem_t;       {memory state to get the block from}
   out     block_p: strflex_block_p_t); {pointer to new block, block initialized}

@@ -1,3 +1,4 @@
+strflex_append.obj
 strflex_block.obj
 strflex_char.obj
 strflex_del.obj

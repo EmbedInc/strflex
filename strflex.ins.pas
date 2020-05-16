@@ -41,6 +41,21 @@ type
 {
 *   Functions and subroutines.
 }
+procedure strflex_append_char (        {append a character to the end of a flex string}
+  in out  str: strflex_t;              {flex string to append to}
+  in      c: char);                    {character to append to end of string}
+  val_param; extern;
+
+procedure strflex_append_str (         {append Pascal/C string to end of flex string}
+  in out  str: strflex_t;              {flex string to append to}
+  in      s: string);                  {string to append, blank padded or NULL term}
+  val_param; extern;
+
+procedure strflex_append_vstr (        {append var string to end of flex string}
+  in out  str: strflex_t;              {flex string to append to}
+  in      vstr: univ string_var_arg_t); {string to append}
+  val_param; extern;
+
 function strflex_char (                {get string character at current position}
   in      pos: strflex_pos_t)          {position into string}
   :char;                               {character at position, NULL past end of string}
