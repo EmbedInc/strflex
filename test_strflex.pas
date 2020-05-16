@@ -10,9 +10,6 @@ program test_strflex;
 %include 'strflex.ins.pas';
 %include 'builddate.ins.pas';
 
-const
-  max_msg_args = 2;                    {max arguments we can pass to a message}
-
 var
   strmem: strflex_mem_t;               {our flex string memory state}
   str: strflex_t;                      {the string under test}
@@ -28,8 +25,6 @@ var
   parm:                                {command parameter}
     %include '(cog)lib/string_treename.ins.pas';
   pick: sys_int_machine_t;             {number of token picked from list}
-  msg_parm:                            {references arguments passed to a message}
-    array[1..max_msg_args] of sys_parm_msg_t;
   stat: sys_err_t;                     {completion status code}
 
 label
@@ -98,7 +93,9 @@ loop_cmd:                              {back here to get each new command}
     end;
 
   lockout;
+(*
   strflex_show_pos (pos);              {show detailed string and position state}
+*)
   string_prompt (prompt);              {prompt the user for a command}
   newline := false;                    {indicate STDOUT not at start of new line}
   unlockout;
