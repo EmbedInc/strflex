@@ -77,6 +77,8 @@ begin
   command ('LAST');                    {10}
   command ('EOS');                     {11}
   command ('TO');                      {12}
+  command ('CLEAR');                   {13}
+  command ('STR');                     {14}
 
   wout_init;                           {init output writing state}
 
@@ -119,8 +121,10 @@ loop_cmd:                              {back here to get each new command}
 
   lockout;                             {acquire lock for writing to output}
   writeln;
-  writeln ('HELP or ?      - Show this list of commands.');
-  writeln ('APP chars      - Append chars to end of string.');
+  writeln ('HELP or ?      - Show this list of commands');
+  writeln ('CLEAR          - Clear string to empty');
+  writeln ('STR chars      - Set string to CHARS');
+  writeln ('APP chars      - Append chars to end of string');
   writeln ('DEL BAK|FWD    - Delete curr char, backward or forward after');
   writeln ('INS BEF|AFT chars - Insert chars before/after curr position');
   writeln ('INC            - Increment current position');
@@ -212,6 +216,7 @@ otherwise
 *   Move position forward by 1.
 }
 8: begin
+  if not_eos then goto err_extra;
   strflex_pos_inc (pos);
   end;
 {
@@ -222,6 +227,7 @@ otherwise
 *   Move position backward by 1.
 }
 9: begin
+  if not_eos then goto err_extra;
   strflex_pos_dec (pos);
   end;
 {
@@ -232,6 +238,7 @@ otherwise
 *   Go to last character in the string.
 }
 10: begin
+  if not_eos then goto err_extra;
   strflex_pos_last (pos);
   end;
 {
@@ -242,6 +249,7 @@ otherwise
 *   Go to past the end of the string.
 }
 11: begin
+  if not_eos then goto err_extra;
   strflex_pos_end (pos);
   end;
 {
@@ -254,8 +262,34 @@ otherwise
 12: begin
   i1 := next_int (-32768, 32767, stat);
   if sys_error(stat) then goto err_cmparm;
+  if not_eos then goto err_extra;
 
   strflex_pos_set (pos, i1);
+  end;
+{
+**********
+*
+*   CLEAR
+*
+*   Clear the string to empty.
+}
+13: begin
+  if not_eos then goto err_extra;
+
+  strflex_clear (str);                 {clear the string}
+  pos_valid := false;                  {string changed directly, POS is invalid}
+  end;
+{
+**********
+*
+*   STR chars
+*
+*   Set the string to CHARS.
+}
+14: begin
+  next_raw (parm);                     {get CHARS into PARM}
+  strflex_copy_f_vstr (parm, str);     {set STR to CHARS}
+  pos_valid := false;                  {string changed directly, POS is invalid}
   end;
 {
 **********

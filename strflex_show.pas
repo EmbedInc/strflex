@@ -105,5 +105,14 @@ begin
 
   write ('  At string index ', pos.ind, ', block ');
   wadr (pos.blk_p);
-  writeln (' char ', pos.blkn);
+  write (' char ', pos.blkn);
+  if strflex_pos_eos (pos)
+    then begin                         {past end of string}
+      write (' EOS');
+      end
+    else begin                         {at a real character}
+      write (' "', strflex_char(pos), '"');
+      end
+    ;
+  writeln;
   end;

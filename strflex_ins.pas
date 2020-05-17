@@ -188,8 +188,8 @@ ins_this:                              {insert into current block}
       (blk_p <> nil) and then          {there is a next block ?}
       (blk_p^.nch < strflex_blkchars)  {the next block is not full ?}
       then begin
-    add_char (blk_p^, 1);              {make empty slot at start of next block}
 into_next:                             {move chars into next block to make room}
+    add_char (blk_p^, 1);              {make empty slot at start of next block}
     blk_p^.ch[1] := pos.blk_p^.ch[pos.blkn]; {copy last char of this block into next}
     if pos.blkn = pos.blk_p^.nch then begin {moved char was current char ?}
       pos.blk_p^.ch[pos.blk_p^.nch] := c; {fill vacated slot with new char}
@@ -212,6 +212,7 @@ into_next:                             {move chars into next block to make room}
       end
     else begin                         {adding in middle or end of curr block}
       add_block_aft (pos);             {create new empty next block}
+      blk_p := pos.blk_p^.next_p;      {get pointer to the new empty block}
       goto into_next;                  {slosh into next block to make room}
       end
     ;
@@ -306,8 +307,8 @@ begin
 }
   if pos.blk_p^.nch < strflex_blkchars then begin
 ins_this:                              {add the new char to the current block}
-    add_char (pos.blk_p^, pos.blkn);   {make room at the current position}
-    pos.blk_p^.ch[pos.blkn] := c;      {write char into vacated spot}
+    add_char (pos.blk_p^, pos.blkn+1); {make room after curr char}
+    pos.blk_p^.ch[pos.blkn+1] := c;    {write char into vacated spot}
     return;
     end;
 {
@@ -321,12 +322,10 @@ ins_this:                              {add the new char to the current block}
       (blk_p <> nil) and then          {there is a next block ?}
       (blk_p^.nch < strflex_blkchars)  {the next block has room ?}
       then begin
-into_next:                             {move a char into the next block}
+into_next:                             {char into next block, BLK_P pnt to next}
     add_char (blk_p^, 1);              {vacate first position in next block}
     if pos.blkn >= pos.blk_p^.nch then begin {at end of current block ?}
       blk_p^.ch[1] := c;               {put new char at start of next block}
-      pos.blk_p := blk_p;              {update position to the new char}
-      pos.blkn := 1;
       return;
       end;
     blk_p^.ch[1] := pos.blk_p^.ch[pos.blk_p^.nch]; {last char into next block}
@@ -337,6 +336,7 @@ into_next:                             {move a char into the next block}
 *   Add a new block after the current.
 }
   add_block_aft (pos);                 {create new empty block after current}
+  blk_p := pos.blk_p^.next_p;          {set pointer to the next block}
   goto into_next;                      {move char into next block to make room}
   end;
 {
@@ -356,7 +356,7 @@ var
   ii: sys_int_machine_t;
 
 begin
-  for ii := 1 to vstr.len do begin
+  for ii := vstr.len downto 1 do begin
     strflex_insaft_char (pos, vstr.str[ii]);
     end;
   end;
