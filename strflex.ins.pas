@@ -51,6 +51,11 @@ procedure strflex_append_str (         {append Pascal/C string to end of flex st
   in      s: string);                  {string to append, blank padded or NULL term}
   val_param; extern;
 
+procedure strflex_append_t_vstr (      {append flex string to end of var string}
+  in      str: strflex_t;              {source flex string}
+  in out  vstr: univ string_var_arg_t); {destination var string}
+  val_param; extern;
+
 procedure strflex_append_vstr (        {append var string to end of flex string}
   in out  str: strflex_t;              {flex string to append to}
   in      vstr: univ string_var_arg_t); {string to append}

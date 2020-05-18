@@ -4,6 +4,7 @@ module strflex_append;
 define strflex_append_char;
 define strflex_append_vstr;
 define strflex_append_str;
+define strflex_append_t_vstr;
 %include 'strflex2.ins.pas';
 {
 ********************************************************************************
@@ -87,4 +88,34 @@ begin
 
   string_vstring (vstr, s, size_char(s)); {convert input string to var string}
   strflex_append_vstr (str, vstr);     {append the var string}
+  end;
+{
+********************************************************************************
+*
+*   Subroutine STRFLEX_APPEND_T_VSTR (STR, VSTR)
+*
+*   Append the contents of the flex string STR to the end of the var string
+*   VSTR.
+}
+procedure strflex_append_t_vstr (      {append flex string to end of var string}
+  in      str: strflex_t;              {source flex string}
+  in out  vstr: univ string_var_arg_t); {destination var string}
+  val_param;
+
+var
+  str_p: strflex_p_t;                  {pointer to input flex string}
+  pos: strflex_pos_t;                  {position within input string}
+  len: sys_int_machine_t;              {final output string length}
+  ii: sys_int_machine_t;               {output string index}
+
+begin
+  str_p := addr(str);                  {make pointer to the input string}
+  strflex_pos_init (str_p^, pos);      {init source position to first char}
+
+  len := min(vstr.max, vstr.len + str.len); {make total length of result string}
+
+  for ii := vstr.len+1 to len do begin {loop over the destination characters}
+    vstr.str[ii] := strflex_char_inc (pos);
+    end;
+  vstr.len := len;                     {update resulting string length}
   end;
